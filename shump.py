@@ -22,11 +22,15 @@ if __name__ == '__main__':
     player = Player()
     all_sprites.add(player)
 
-    # добавление моба
+    # добавление мобов
+    mobs = pygame.sprite.Group()
     for i in range(MOB_COUNT):
         m = Mob()
         all_sprites.add(m)
+        mobs.add(m)
     
+    # пули
+    bullets = pygame.sprite.Group()
 
     # игровой цикл
     isRunning = True
@@ -38,9 +42,27 @@ if __name__ == '__main__':
             # проверка на закрытие игры
             if event.type == pygame.QUIT:
                 isRunning = False
-        
+            
+            # проверка нажатия клавиш
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE: # если нажали пробел
+                    player.shoot(all_sprites, bullets)              # то стреляем
+
         all_sprites.update() # обновление
 
+        # проверка на столкновение пуль и мобов с установкой dokill
+        hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
+        for hit in hits:
+            m = Mob()
+            all_sprites.add(m)
+            mobs.add(m)
+
+        # проверка моба на столкновение
+        hits = pygame.sprite.spritecollide(player, mobs, False)
+        if hits:
+            isRunning = False
+
+       
         screen.fill((0, 0, 0))      # отрисовка фона
         all_sprites.draw(screen)    # отрисовка спрайтов
         pygame.display.flip()       # флип экрана

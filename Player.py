@@ -1,8 +1,11 @@
 import pygame
 
+
 from settings import WIDTH
 from settings import HEIGHT
 from settings import FPS
+
+from Bullet import Bullet
 
 class Player(pygame.sprite.Sprite):
     """класс игрока"""
@@ -33,6 +36,12 @@ class Player(pygame.sprite.Sprite):
             self.rect.right = WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
+
+    # метод стрельбы
+    def shoot(self, all_sprites, bullets):
+        bullet = Bullet(self.rect.centerx, self.rect.top)
+        all_sprites.add(bullet)
+        bullets.add(bullet)
 
 
 

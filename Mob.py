@@ -4,7 +4,6 @@ import random
 
 from settings import WIDTH
 from settings import HEIGHT
-from settings import FPS
 
 class Mob(pygame.sprite.Sprite):
     """The Mob class"""
