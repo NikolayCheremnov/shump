@@ -14,7 +14,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, player_img, bullet_img):
         # установка начальных значений
         self.bullet_img = bullet_img
-        
+        self.score = 0
+
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((50, 40))   # заменяем пока что героя прямоугольником
         #self.image.fill((0, 255, 0))           # раскрашиваем макет
@@ -44,10 +45,11 @@ class Player(pygame.sprite.Sprite):
             self.rect.left = 0
 
     # метод стрельбы
-    def shoot(self, all_sprites, bullets):
+    def shoot(self, all_sprites, bullets, shoot_sound):
         bullet = Bullet(self.rect.centerx, self.rect.top, self.bullet_img)
         all_sprites.add(bullet)
         bullets.add(bullet)
+        shoot_sound.play()
 
 
 

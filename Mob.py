@@ -14,7 +14,7 @@ class Mob(pygame.sprite.Sprite):
         self.image = pygame.Surface((30, 40))   # сделать лицевое отображение
         #self.image.fill((0, 255, 255))          # заполнить цветом
         self.image = mob_img
-        self.image = pygame.transform.scale(mob_img, (20, 20))   # ставим нужный размер корабля
+        self.image = pygame.transform.scale(mob_img, (40, 40))   # ставим нужный размер корабля
         self.image.set_colorkey((0,0,0))                              # ставим прозрачный фон
 
         self.rect = self.image.get_rect()       # получить свойства прямоугольника

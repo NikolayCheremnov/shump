@@ -6,9 +6,20 @@ from settings import HEIGHT
 from settings import FPS
 from settings import MOB_COUNT
 from settings import IMGDIR
+from settings import SNDDIR
+from settings import FONTNAME
 
 from Player import Player
 from Mob import Mob
+
+# процедура отрисовки текста
+def draw_text(surf, text, size, x, y):
+    font = pygame.font.Font(FONTNAME, size)
+    text_surface = font.render(text, True, (255,255,255))
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (x, y)
+    surf.blit(text_surface, text_rect)
+
 
 # точка входа игры
 if __name__ == '__main__':
@@ -31,6 +42,11 @@ if __name__ == '__main__':
     mob_img = pygame.image.load(path.join(IMGDIR, "mob.png")).convert()
     bullet_img = pygame.image.load(path.join(IMGDIR, "bullet.png")).convert()
 
+    # загрузка музыки
+    shoot_sound = pygame.mixer.Sound(path.join(SNDDIR, 'shoot.wav'))
+    pygame.mixer.music.load(path.join(SNDDIR, 'back.wav'))
+    pygame.mixer.music.set_volume(0.4)
+
     # добавление игрока
     player = Player(player_img, bullet_img)
     all_sprites.add(player)
@@ -46,6 +62,7 @@ if __name__ == '__main__':
     bullets = pygame.sprite.Group()
 
     # игровой цикл
+    pygame.mixer.music.play(loops=-1)
     isRunning = True
     while isRunning:
         clock.tick(FPS) # держим игровую скорость
@@ -59,13 +76,14 @@ if __name__ == '__main__':
             # проверка нажатия клавиш
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE: # если нажали пробел
-                    player.shoot(all_sprites, bullets)              # то стреляем
+                    player.shoot(all_sprites, bullets, shoot_sound)              # то стреляем
 
         all_sprites.update() # обновление
 
         # проверка на столкновение пуль и мобов с установкой dokill
         hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
         for hit in hits:
+            player.score += 1 # прибавить счет
             m = Mob(mob_img)
             all_sprites.add(m)
             mobs.add(m)
@@ -79,7 +97,7 @@ if __name__ == '__main__':
         screen.fill((0, 0, 0))      # отрисовка фона
         screen.blit(background, background_rect) # установить фоновую картинку
         all_sprites.draw(screen)    # отрисовка спрайтов
+        draw_text(screen, str(player.score), 18, WIDTH/2, 10) # вывести счет
         pygame.display.flip()       # флип экрана
 
     pygame.quit()
-
