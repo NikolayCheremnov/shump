@@ -11,10 +11,16 @@ class Player(pygame.sprite.Sprite):
     """класс игрока"""
 
     # конструктор
-    def __init__(self):
+    def __init__(self, player_img, bullet_img):
+        # установка начальных значений
+        self.bullet_img = bullet_img
+        
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((50, 40))   # заменяем пока что героя прямоугольником
-        self.image.fill((0, 255, 0))           # раскрашиваем макет
+        #self.image.fill((0, 255, 0))           # раскрашиваем макет
+        self.image = player_img
+        self.image = pygame.transform.scale(player_img, (50, 30))   # ставим нужный размер корабля
+        self.image.set_colorkey((0,0,0))                              # ставим прозрачный фон
         self.rect = self.image.get_rect()
         # устанавливаем начальные положения
         self.rect_centerx = WIDTH / 2
@@ -39,7 +45,7 @@ class Player(pygame.sprite.Sprite):
 
     # метод стрельбы
     def shoot(self, all_sprites, bullets):
-        bullet = Bullet(self.rect.centerx, self.rect.top)
+        bullet = Bullet(self.rect.centerx, self.rect.top, self.bullet_img)
         all_sprites.add(bullet)
         bullets.add(bullet)
 

@@ -1,9 +1,11 @@
 import pygame 
+from os import path
 
 from settings import WIDTH
 from settings import HEIGHT
 from settings import FPS
 from settings import MOB_COUNT
+from settings import IMGDIR
 
 from Player import Player
 from Mob import Mob
@@ -13,19 +15,30 @@ if __name__ == '__main__':
     # инициализация движка
     pygame.init()
     pygame.mixer.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Shmup!")
     clock = pygame.time.Clock()
 
-    # добавление игрока
+    # набор всех спрайтов
     all_sprites = pygame.sprite.Group()
-    player = Player()
+
+    # настройка экрана
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+    # загрузка игровой графики
+    background = pygame.image.load(path.join(IMGDIR, 'purple.png')).convert()
+    background_rect = background.get_rect()
+    player_img = pygame.image.load(path.join(IMGDIR, "spaceship.png")).convert()
+    mob_img = pygame.image.load(path.join(IMGDIR, "mob.png")).convert()
+    bullet_img = pygame.image.load(path.join(IMGDIR, "bullet.png")).convert()
+
+    # добавление игрока
+    player = Player(player_img, bullet_img)
     all_sprites.add(player)
 
     # добавление мобов
     mobs = pygame.sprite.Group()
     for i in range(MOB_COUNT):
-        m = Mob()
+        m = Mob(mob_img)
         all_sprites.add(m)
         mobs.add(m)
     
@@ -53,7 +66,7 @@ if __name__ == '__main__':
         # проверка на столкновение пуль и мобов с установкой dokill
         hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
         for hit in hits:
-            m = Mob()
+            m = Mob(mob_img)
             all_sprites.add(m)
             mobs.add(m)
 
@@ -64,6 +77,7 @@ if __name__ == '__main__':
 
        
         screen.fill((0, 0, 0))      # отрисовка фона
+        screen.blit(background, background_rect) # установить фоновую картинку
         all_sprites.draw(screen)    # отрисовка спрайтов
         pygame.display.flip()       # флип экрана
 
