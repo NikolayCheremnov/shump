@@ -38,7 +38,11 @@ if __name__ == '__main__':
     # загрузка игровой графики
     background = pygame.image.load(path.join(IMGDIR, 'purple.png')).convert()
     background_rect = background.get_rect()
+
     player_img = pygame.image.load(path.join(IMGDIR, "spaceship.png")).convert()
+    left_player_img = pygame.image.load(path.join(IMGDIR, "left_spaceship.png")).convert()
+    right_player_img = pygame.image.load(path.join(IMGDIR, "right_spaceship.png")).convert()
+
     mob_img = pygame.image.load(path.join(IMGDIR, "mob.png")).convert()
     bullet_img = pygame.image.load(path.join(IMGDIR, "bullet.png")).convert()
 
@@ -48,7 +52,7 @@ if __name__ == '__main__':
     pygame.mixer.music.set_volume(0.4)
 
     # добавление игрока
-    player = Player(player_img, bullet_img)
+    player = Player(player_img, left_player_img, right_player_img, bullet_img)
     all_sprites.add(player)
 
     # добавление мобов
